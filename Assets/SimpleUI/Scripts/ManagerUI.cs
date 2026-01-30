@@ -1,223 +1,304 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 // ManagerUI = central runtime controller that drives which UI Pages are visible.
-// - Pages are referenced by an id (string) -> GameObject (usually the root of a UI page/panel).
-// - There are 2 different stacks:
+// - Pages are referenced by an id (string) -> Page (root of UI page/panel).
+// - There are 2 stacks:
 //   1) MainStack    : history of main pages opened via OpenTo()
-//   2) OverlayStack : overlays / popups currently opened on top of the main page via OpenOverlay()
-// - Back() rule: close overlays first; if no overlay is open, go back in the main page history.
+//   2) OverlayStack : overlays / popups opened via OpenOverlay()
+// - Back() rule: close overlays first; if no overlay is open, go back in main history.
 public class ManagerUI : MonoBehaviour
 {
-     // Main dictionary: id -> GameObject page instance.
-     // Assumption: these GameObjects are already instantiated in the scene (not prefabs),
-     // and can be shown/hidden using SetActive.
-     private Dictionary<string, Page> Pages = new Dictionary<string, Page>();
+    // Main dictionary: id -> Page instance.
+    private readonly Dictionary<string, Page> Pages = new Dictionary<string, Page>();
 
-     // History stack of main pages opened with OpenTo().
-     // Serialized mainly for debugging in the inspector.
-     [SerializeField]
-     private List<string> MainStack = new List<string>();
+    // Serialized mainly for debugging in the inspector.
+    [SerializeField] private List<string> MainStack = new List<string>();
 
-     // Stack of currently opened overlays (popups).
-     // Last element = topmost overlay.
-     private List<string> OverlayStack = new List<string>();
+    // Last element = topmost overlay.
+    private readonly List<string> OverlayStack = new List<string>();
 
-     // Id of the default (root) page, opened at Start().
-     [SerializeField]
-     private string defaultID; 
-     
-     #region SINGLETON PATTERN
-     // Simple singleton:
-     // - Only one instance is allowed.
-     // - The instance survives scene changes (DontDestroyOnLoad).
-     public static ManagerUI Instance;
+    [SerializeField] private string defaultID;
 
-     private void Awake()
-     {
-          // If another instance already exists, destroy this one.
-          if (Instance != null && Instance != this)
-          {
-               Destroy(gameObject);
-               return;
-          }
+    // Optional: global input blocker (CanvasGroup) to avoid clicks during transitions.
+    // - Assign a full-screen UI object with CanvasGroup (blocks raycasts).
+    [Header("Optional")]
+    [SerializeField] private CanvasGroup inputBlocker;
 
-          // Otherwise, become the global instance.
-          Instance = this;
+    private bool isBusy;
+    public bool IsBusy => isBusy;
 
-          // Make this manager persistent across scenes.
-          DontDestroyOnLoad(gameObject);
-     }
-     #endregion
+    #region SINGLETON
+    public static ManagerUI Instance;
 
-     private void Start()
-     {
-          // On startup, open the default (root) page.
-          // OpenTo() closes all overlays and shows only one main page.
-     }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-     private bool tg;
-     private void Update()
-     {
-          if (!tg)
-          {
-               OpenTo(defaultID);
-               tg = true;
-          }
-     }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    #endregion
 
-     // Registers a page in the dictionary (id -> GameObject).
-     // If the id already exists, TryAdd fails and we log a warning instead of silently overwriting it.
-     public void AddElement(string id, Page _page)
-     {
-          if (!Pages.TryAdd(id, _page))
-               Debug.LogWarning($"ManagerUI: id '{id}' already registered.");
-     }
+    private bool isLoad = false;
+    private void Update()
+    {
+        if (!isLoad)
+        {
+            // If pages register in Awake(), they should be ready here.
+            if (!string.IsNullOrEmpty(defaultID))
+                OpenTo(defaultID);
+            isLoad = true;
+        }
 
-     // Unregisters a page.
-     // - If the id is not found, do nothing.
-     // - Also removes this id from both stacks to avoid keeping dead references in history.
-     public void RemoveElement(string id)
-     {
-          if (!Pages.Remove(id)) return;
-          OverlayStack.RemoveAll(x => x == id);
-          MainStack.RemoveAll(x => x == id);
-     }
+    }
 
-     // Opens a "main" page (exclusive mode):
-     // - Checks that the id exists.
-     // - Closes all overlays (change of context).
-     // - Disables all pages, then enables only the target page.
-     // - Pushes the id to MainStack if it is not already the current top page.
-     public void OpenTo(string id)
-     {
-          // Safety check: the id must exist.
-          if (!CheckIdExists(id)) return;
+    // Registers a page (id -> Page).
+    public void AddElement(string id, Page page)
+    {
+        if (string.IsNullOrEmpty(id) || page == null)
+        {
+            LogW("ManagerUI: AddElement called with invalid arguments.");
+            return;
+        }
 
-          // Close all overlays when changing main page.
-          CloseAllOverlaysInternal();
+        if (!Pages.TryAdd(id, page))
+            LogW($"ManagerUI: id '{id}' already registered (keeping first).");
+    }
 
-          // Exclusive display: turn everything off, then turn the target page on.
-          foreach (var kv in Pages) kv.Value.OnExit() ;
-          Pages[id].OnEnter();
+    // Unregisters a page and removes it from stacks.
+    public void RemoveElement(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+        if (!Pages.Remove(id)) return;
 
-          // Update main history stack, avoid duplicate on top.
-          if (MainStack.Count == 0 || MainStack[^1] != id)
-               MainStack.Add(id);
-     }
+        OverlayStack.RemoveAll(x => x == id);
+        MainStack.RemoveAll(x => x == id);
+    }
 
-     // Opens an overlay page (popup) on top of the current main page:
-     // - Checks that the id exists.
-     // - Prevents opening the same overlay multiple times (no duplicates policy).
-     // - Activates the GameObject, moves it to the top of the hierarchy (render order),
-     //   and pushes the id to OverlayStack.
-     public void OpenOverlay(string id)
-     {
-          // Safety check.
-          if (!CheckIdExists(id)) return;
+    // === PUBLIC API ===
 
-          // Policy: do not allow the same overlay to be stacked multiple times.
-          if (OverlayStack.Contains(id)) return;
+    public void OpenTo(string id)
+    {
+        if (isBusy) return;
+        if (!CheckIdExists(id)) return;
 
-          // Show the overlay.
-          Pages[id].OnEnter();
+        StartCoroutine(IE_OpenTo(id));
+    }
 
-          // Ensure it is rendered above the others (last sibling in the Canvas hierarchy).
-          Pages[id].transform.SetAsLastSibling();
+    public void OpenOverlay(string id)
+    {
+        if (isBusy) return;
+        if (!CheckIdExists(id)) return;
 
-          // Push to overlay stack so Back() will close it first.
-          OverlayStack.Add(id);
-     }
+        // No duplicate on top policy (you can change to Contains if you prefer)
+        if (OverlayStack.Count > 0 && OverlayStack[^1] == id) return;
 
-     // Back action (Escape / Android back / gamepad B):
-     // Rule:
-     // 1) If there is at least one overlay open -> close the topmost overlay and return.
-     // 2) Otherwise, if there is more than one main page in history ->
-     //    close the current main page and show the previous one.
-     // 3) Otherwise -> we are at root, do nothing (or later trigger an event).
-     public void Back()
-     {
-          // 1) Overlays have priority.
-          if (OverlayStack.Count > 0)
-          {
-               // Get the top overlay.
-               var id = OverlayStack[^1];
+        StartCoroutine(IE_OpenOverlay(id));
+    }
 
-               // Pop it from the stack.
-               OverlayStack.RemoveAt(OverlayStack.Count - 1);
+    public void Back()
+    {
+        if (isBusy) return;
+        StartCoroutine(IE_Back());
+    }
 
-               // Safely disable it if it still exists.
-               if (Pages.TryGetValue(id, out var go)) go.OnExit();
+    public void CloseAll()
+    {
+        if (isBusy) return;
+        StartCoroutine(IE_CloseAll());
+    }
 
-               return;
-          }
+    public void OpenDefault()
+    {
+        if (isBusy) return;
+        if (string.IsNullOrEmpty(defaultID)) return;
+        OpenTo(defaultID);
+    }
 
-          // 2) No overlays: handle main page history.
-          // If we have 0 or 1 main page, we are at root: nothing to go back to.
-          if (MainStack.Count <= 1)
-               return; // root
+    // === COROUTINES (transaction-style) ===
 
-          // Current main page.
-          var current = MainStack[^1];
+    private IEnumerator IE_OpenTo(string id)
+    {
+        SetBusy(true);
 
-          // Pop it.
-          MainStack.RemoveAt(MainStack.Count - 1);
+        // 1) Close overlays first
+        yield return CloseAllOverlaysInternal();
 
-          // Disable the current page.
-          if (Pages.TryGetValue(current, out var curGo)) curGo.OnExit();
+        // 2) Exit current main (top of MainStack), if any and different
+        string currentMain = MainStack.Count > 0 ? MainStack[^1] : null;
+        if (!string.IsNullOrEmpty(currentMain) && currentMain != id && Pages.TryGetValue(currentMain, out var curPage))
+        {
+            yield return curPage.Hide(); // exit + disable
+        }
 
-          // Previous main page becomes the new top.
-          var prev = MainStack[^1];
+        // 3) Ensure all non-target MAIN pages are disabled (robust exclusive mode)
+        // Note: We only hard-disable pages that are NOT the target and NOT currently in overlay stack.
+        // This prevents weird leftover active pages.
+        foreach (var kv in Pages)
+        {
+            var pid = kv.Key;
+            var p = kv.Value;
 
-          // Enable the previous page.
-          if (Pages.TryGetValue(prev, out var prevGo)) prevGo.OnEnter();
-     }
+            if (pid == id) continue;
+            if (OverlayStack.Contains(pid)) continue; // should be empty here, but safe
 
-     // Closes all currently opened overlays:
-     // - Iterates from top to bottom (LIFO order).
-     // - Disables each overlay if it exists.
-     // - Clears the OverlayStack.
-     private void CloseAllOverlaysInternal()
-     {
-          for (int i = OverlayStack.Count - 1; i >= 0; i--)
-          {
-               var id = OverlayStack[i];
-               if (Pages.TryGetValue(id, out var go)) go.OnExit();
-          }
-          OverlayStack.Clear();
-     }
+            // Hard disable (no transition) if it’s active for any reason.
+            // You can also choose to call Hide() if you want exit transitions everywhere.
+            if (p.gameObject.activeSelf)
+                p.ForceDisable();
+        }
 
-     // Closes absolutely everything:
-     // - Disables all registered pages.
-     // - Clears both stacks (full navigation reset).
-     public void CloseAll()
-     {
-          foreach (var screen in Pages)
-               screen.Value.OnExit();
+        // 4) Show target
+        if (Pages.TryGetValue(id, out var target))
+        {
+            yield return target.Show(); // enable + enter
+        }
 
-          OverlayStack.Clear();
-          MainStack.Clear();
-     }
+        // 5) Update history (no duplicate on top; also remove existing occurrences)
+        MainStack.RemoveAll(x => x == id);
+        MainStack.Add(id);
 
-     // Shortcut to go back to the default (root) page.
-     public void OpenDefault()
-     {
-          OpenTo(defaultID);
-     }
+        SetBusy(false);
+    }
 
-     // Checks whether an id exists in the Pages dictionary.
-     // - Logs an error if it does not.
-     // - Returns true/false so callers can early-out safely.
-     private bool CheckIdExists(string id)
-     {
-          if (!Pages.TryGetValue(id, out var go))
-          {
-               Debug.LogError($"ManagerUI: Unknown id '{id}'");
-               return false;
-          }
-          
-          return true;
-     }
+    private IEnumerator IE_OpenOverlay(string id)
+    {
+        SetBusy(true);
+
+        if (Pages.TryGetValue(id, out var overlay))
+        {
+            // Show and bring to front
+            overlay.transform.SetAsLastSibling();
+            yield return overlay.Show();
+        }
+
+        // Push overlay
+        OverlayStack.Add(id);
+
+        SetBusy(false);
+    }
+
+    private IEnumerator IE_Back()
+    {
+        SetBusy(true);
+
+        // 1) Close top overlay if any
+        if (OverlayStack.Count > 0)
+        {
+            var id = OverlayStack[^1];
+            OverlayStack.RemoveAt(OverlayStack.Count - 1);
+
+            if (Pages.TryGetValue(id, out var overlay))
+                yield return overlay.Hide();
+
+            SetBusy(false);
+            yield break;
+        }
+
+        // 2) Main history
+        if (MainStack.Count <= 1)
+        {
+            // Root: do nothing (later: event)
+            SetBusy(false);
+            yield break;
+        }
+
+        var current = MainStack[^1];
+        MainStack.RemoveAt(MainStack.Count - 1);
+
+        if (Pages.TryGetValue(current, out var curPage))
+            yield return curPage.Hide();
+
+        var prev = MainStack[^1];
+        if (Pages.TryGetValue(prev, out var prevPage))
+            yield return prevPage.Show();
+
+        SetBusy(false);
+    }
+
+    private IEnumerator IE_CloseAll()
+    {
+        SetBusy(true);
+
+        // Close overlays (top to bottom)
+        yield return CloseAllOverlaysInternal();
+
+        // Close mains (optionally transition only the current one)
+        // Here: hide everything with transitions if active
+        foreach (var kv in Pages)
+        {
+            if (kv.Value.gameObject.activeSelf)
+                yield return kv.Value.Hide();
+        }
+
+        OverlayStack.Clear();
+        MainStack.Clear();
+
+        SetBusy(false);
+    }
+
+    private IEnumerator CloseAllOverlaysInternal()
+    {
+        for (int i = OverlayStack.Count - 1; i >= 0; i--)
+        {
+            var id = OverlayStack[i];
+            if (Pages.TryGetValue(id, out var page))
+                yield return page.Hide();
+        }
+
+        OverlayStack.Clear();
+    }
+
+    // === HELPERS ===
+
+    private void SetBusy(bool value)
+    {
+        isBusy = value;
+
+        if (inputBlocker != null)
+        {
+            inputBlocker.blocksRaycasts = value;
+            inputBlocker.interactable = value;
+            // Optional: show/hide blocker visually if you want:
+            // inputBlocker.alpha = value ? 1f : 0f;
+        }
+    }
+
+    private bool CheckIdExists(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            LogE("ManagerUI: Empty id.");
+            return false;
+        }
+
+        if (!Pages.ContainsKey(id))
+        {
+            LogE($"ManagerUI: Unknown id '{id}'");
+            return false;
+        }
+
+        return true;
+    }
+    
+    private void LogW(string msg, Object ctx = null)
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Debug.LogWarning(msg, ctx);
+#endif
+    }
+
+    private void LogE(string msg, Object ctx = null)
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Debug.LogError(msg, ctx);
+#endif
+    }
+
 }

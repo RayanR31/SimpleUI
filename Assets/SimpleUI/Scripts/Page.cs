@@ -1,53 +1,73 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 // Page = component that marks a GameObject as a UI Page managed by ManagerUI.
-//
 // Responsibilities:
-// - Holds the unique id of the page.
-// - Automatically registers itself to ManagerUI at startup.
-// - Automatically unregisters itself when destroyed.
-//
-// This allows pages to be completely "plug and play":
-// just add this component to a UI root GameObject and it becomes manageable by the UI system.
+// - Holds a unique id
+// - Auto register/unregister
+// - Provides Show/Hide methods that play transitions explicitly
 public class Page : MonoBehaviour
 {
-    // Unique identifier of this page.
-    // If left empty in the Inspector, it will default to the GameObject name.
     [SerializeField] private string id;
 
+    [Header("Optional")]
     public PageTransition pageTransition = new PageTransition();
-    // Called once at startup.
-    void Start()
-    {
-        // If no id is provided, use the GameObject name as a default id.
-        // This makes setup faster and avoids mandatory manual typing.
-        if (string.IsNullOrEmpty(id))
-        {
-            id = gameObject.name; 
-        }
 
-        // Register this page in the ManagerUI so it can be opened/closed by id.
+    private Coroutine enterCo;
+    private Coroutine exitCo;
+
+    private void Start()
+    {
+        if (string.IsNullOrEmpty(id))
+            id = gameObject.name;
+
         ManagerUI.Instance.AddElement(id, this);
+
+        // Optional: start disabled so ManagerUI controls everything
+        // (You can remove this if you want designers to keep some pages active by default.)
+        // gameObject.SetActive(false);
     }
 
-    // Called when this GameObject is destroyed.
     private void OnDestroy()
     {
-        // Unregister this page from the ManagerUI to avoid keeping a dead reference.
-        ManagerUI.Instance.RemoveElement(id);
+        if (ManagerUI.Instance != null)
+            ManagerUI.Instance.RemoveElement(id);
     }
-    public void OnEnter()
+
+    // Enable + enter transition
+    public IEnumerator Show()
     {
-        StopAllCoroutines();
+        // Stop only transition coroutines (not StopAllCoroutines)
+        if (exitCo != null) { StopCoroutine(exitCo); exitCo = null; }
+        if (enterCo != null) { StopCoroutine(enterCo); enterCo = null; }
+
         gameObject.SetActive(true);
-        StartCoroutine(pageTransition.IEOnEnter());
+
+        if (pageTransition != null)
+            yield return pageTransition.PlayEnter();
     }
-    public void OnExit()
+
+    // Exit transition + disable
+    public IEnumerator Hide()
     {
-        if(gameObject.activeInHierarchy)
-            StartCoroutine(pageTransition.IEOnExit(gameObject));
+        if (!gameObject.activeSelf)
+            yield break;
+
+        if (enterCo != null) { StopCoroutine(enterCo); enterCo = null; }
+        if (exitCo != null) { StopCoroutine(exitCo); exitCo = null; }
+
+        if (pageTransition != null)
+            yield return pageTransition.PlayExit();
+
+        // Disable after exit
+        gameObject.SetActive(false);
+    }
+
+    // Hard disable without transition (robust cleanup)
+    public void ForceDisable()
+    {
+        if (enterCo != null) { StopCoroutine(enterCo); enterCo = null; }
+        if (exitCo != null) { StopCoroutine(exitCo); exitCo = null; }
+        gameObject.SetActive(false);
     }
 }

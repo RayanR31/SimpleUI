@@ -176,7 +176,7 @@ MonoBehaviour:
     Event_Enter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
+    durationEnter: 2
     Event_Exit:
       m_PersistentCalls:
         m_Calls: []
@@ -233,8 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: inputManette
   action: 1
+  targetId: inputManette
+  disableButtonWhileBusy: 1
 --- !u!114 &85243431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,8 +1551,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &558371386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1886,6 +1888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ManagerUI
   MainStack: []
   defaultID: mainMenu
+  inputBlocker: {fileID: 0}
 --- !u!4 &715469821
 Transform:
   m_ObjectHideFlags: 0
@@ -2028,8 +2031,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &910000717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2725,8 +2729,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: settingPLus
   action: 1
+  targetId: settingPLus
+  disableButtonWhileBusy: 1
 --- !u!114 &1234686548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2861,8 +2866,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &1287368545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3609,8 +3615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &1422013732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3745,8 +3752,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &1518008714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3881,8 +3889,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: input
   action: 0
+  targetId: input
+  disableButtonWhileBusy: 1
 --- !u!114 &1544365771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4161,8 +4170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: setting
   action: 0
+  targetId: setting
+  disableButtonWhileBusy: 1
 --- !u!1 &1628788027
 GameObject:
   m_ObjectHideFlags: 0
@@ -4280,8 +4290,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: 
   action: 2
+  targetId: 
+  disableButtonWhileBusy: 1
 --- !u!114 &1697057155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4662,8 +4673,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12e3c453ca1642e69d7284cf7c44ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
-  id: credit
   action: 0
+  targetId: credit
+  disableButtonWhileBusy: 1
 --- !u!114 &1797187271
 MonoBehaviour:
   m_ObjectHideFlags: 0

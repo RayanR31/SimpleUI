@@ -6,22 +6,25 @@ using UnityEngine.Events;
 [Serializable]
 public class PageTransition
 {
-    [Header("Event Enter")]
-    public UnityEvent Event_Enter; 
-    public float durationEnter = 0f;
+    [Header("Enter")]
+    public UnityEvent Event_Enter;
+    [Min(0f)] public float durationEnter = 0f;
 
-    [Header("Event Exit")]
+    [Header("Exit")]
     public UnityEvent Event_Exit;
-    public float durationExit = 0f;
-    public IEnumerator IEOnEnter()
+    [Min(0f)] public float durationExit = 0f;
+
+    public IEnumerator PlayEnter()
     {
         Event_Enter?.Invoke();
-        yield return new WaitForSeconds(durationEnter);
+        if (durationEnter > 0f)
+            yield return new WaitForSeconds(durationEnter);
     }
-    public IEnumerator IEOnExit(GameObject go)
+
+    public IEnumerator PlayExit()
     {
         Event_Exit?.Invoke();
-        yield return new WaitForSeconds(durationExit);
-        go.SetActive(false);
+        if (durationExit > 0f)
+            yield return new WaitForSeconds(durationExit);
     }
 }
