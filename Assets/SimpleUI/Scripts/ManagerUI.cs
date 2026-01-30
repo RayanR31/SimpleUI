@@ -14,7 +14,7 @@ public class ManagerUI : MonoBehaviour
      // Main dictionary: id -> GameObject page instance.
      // Assumption: these GameObjects are already instantiated in the scene (not prefabs),
      // and can be shown/hidden using SetActive.
-     private Dictionary<string, GameObject> Pages = new Dictionary<string, GameObject>();
+     private Dictionary<string, Page> Pages = new Dictionary<string, Page>();
 
      // History stack of main pages opened with OpenTo().
      // Serialized mainly for debugging in the inspector.
@@ -70,9 +70,9 @@ public class ManagerUI : MonoBehaviour
 
      // Registers a page in the dictionary (id -> GameObject).
      // If the id already exists, TryAdd fails and we log a warning instead of silently overwriting it.
-     public void AddElement(string id, GameObject go)
+     public void AddElement(string id, Page _page)
      {
-          if (!Pages.TryAdd(id, go))
+          if (!Pages.TryAdd(id, _page))
                Debug.LogWarning($"ManagerUI: id '{id}' already registered.");
      }
 
@@ -100,8 +100,8 @@ public class ManagerUI : MonoBehaviour
           CloseAllOverlaysInternal();
 
           // Exclusive display: turn everything off, then turn the target page on.
-          foreach (var kv in Pages) kv.Value.SetActive(false) ;
-          Pages[id].SetActive(true);
+          foreach (var kv in Pages) kv.Value.OnExit() ;
+          Pages[id].OnEnter();
 
           // Update main history stack, avoid duplicate on top.
           if (MainStack.Count == 0 || MainStack[^1] != id)
@@ -122,7 +122,7 @@ public class ManagerUI : MonoBehaviour
           if (OverlayStack.Contains(id)) return;
 
           // Show the overlay.
-          Pages[id].SetActive(true);
+          Pages[id].OnEnter();
 
           // Ensure it is rendered above the others (last sibling in the Canvas hierarchy).
           Pages[id].transform.SetAsLastSibling();
@@ -149,7 +149,7 @@ public class ManagerUI : MonoBehaviour
                OverlayStack.RemoveAt(OverlayStack.Count - 1);
 
                // Safely disable it if it still exists.
-               if (Pages.TryGetValue(id, out var go)) go.SetActive(false);
+               if (Pages.TryGetValue(id, out var go)) go.OnExit();
 
                return;
           }
@@ -166,13 +166,13 @@ public class ManagerUI : MonoBehaviour
           MainStack.RemoveAt(MainStack.Count - 1);
 
           // Disable the current page.
-          if (Pages.TryGetValue(current, out var curGo)) curGo.SetActive(false);
+          if (Pages.TryGetValue(current, out var curGo)) curGo.OnExit();
 
           // Previous main page becomes the new top.
           var prev = MainStack[^1];
 
           // Enable the previous page.
-          if (Pages.TryGetValue(prev, out var prevGo)) prevGo.SetActive(true) ;
+          if (Pages.TryGetValue(prev, out var prevGo)) prevGo.OnEnter();
      }
 
      // Closes all currently opened overlays:
@@ -184,7 +184,7 @@ public class ManagerUI : MonoBehaviour
           for (int i = OverlayStack.Count - 1; i >= 0; i--)
           {
                var id = OverlayStack[i];
-               if (Pages.TryGetValue(id, out var go)) go.SetActive(false);
+               if (Pages.TryGetValue(id, out var go)) go.OnExit();
           }
           OverlayStack.Clear();
      }
@@ -195,7 +195,7 @@ public class ManagerUI : MonoBehaviour
      public void CloseAll()
      {
           foreach (var screen in Pages)
-               screen.Value.SetActive(false);
+               screen.Value.OnExit();
 
           OverlayStack.Clear();
           MainStack.Clear();

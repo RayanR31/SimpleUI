@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // Page = component that marks a GameObject as a UI Page managed by ManagerUI.
 //
@@ -16,6 +18,7 @@ public class Page : MonoBehaviour
     // If left empty in the Inspector, it will default to the GameObject name.
     [SerializeField] private string id;
 
+    public PageTransition pageTransition = new PageTransition();
     // Called once at startup.
     void Start()
     {
@@ -27,8 +30,7 @@ public class Page : MonoBehaviour
         }
 
         // Register this page in the ManagerUI so it can be opened/closed by id.
-        ManagerUI.Instance.AddElement(id, this.gameObject);
-        Debug.Log("Add Element");
+        ManagerUI.Instance.AddElement(id, this);
     }
 
     // Called when this GameObject is destroyed.
@@ -36,5 +38,16 @@ public class Page : MonoBehaviour
     {
         // Unregister this page from the ManagerUI to avoid keeping a dead reference.
         ManagerUI.Instance.RemoveElement(id);
+    }
+    public void OnEnter()
+    {
+        StopAllCoroutines();
+        gameObject.SetActive(true);
+        StartCoroutine(pageTransition.IEOnEnter());
+    }
+    public void OnExit()
+    {
+        if(gameObject.activeInHierarchy)
+            StartCoroutine(pageTransition.IEOnExit(gameObject));
     }
 }

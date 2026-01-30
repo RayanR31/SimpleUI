@@ -172,6 +172,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: 
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &85243428
 GameObject:
   m_ObjectHideFlags: 0
@@ -927,6 +936,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: 
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &414377813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,6 +1136,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: inputManette
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &423252571
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,6 +3409,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: mainMenu
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &1384131988
 GameObject:
   m_ObjectHideFlags: 0
@@ -3982,6 +4018,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: input
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &1618768021
 GameObject:
   m_ObjectHideFlags: 0
@@ -4965,6 +5010,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: 
+  pageTransition:
+    Event_Enter:
+      m_PersistentCalls:
+        m_Calls: []
+    durationEnter: 0
+    Event_Exit:
+      m_PersistentCalls:
+        m_Calls: []
+    durationExit: 0
 --- !u!1 &2081440448
 GameObject:
   m_ObjectHideFlags: 0
