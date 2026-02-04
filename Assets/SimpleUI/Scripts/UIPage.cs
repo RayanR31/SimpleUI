@@ -1,18 +1,19 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Marks a GameObject as a navigable UI Page.
 /// Pages automatically register themselves to ManagerUI
 /// and can be opened via their unique ID.
 /// </summary>
-// Page = component that marks a GameObject as a UI Page managed by ManagerUI.
+// UIPage = component that marks a GameObject as a UI Page managed by UIManager.
 // Responsibilities:
 // - Holds a unique id
 // - Auto register/unregister
 // - Provides Show/Hide methods that play transitions explicitly
 [DisallowMultipleComponent]
-public class Page : MonoBehaviour
+public class UIPage : MonoBehaviour
 {
     [Header("Identification")]
 
@@ -22,11 +23,12 @@ public class Page : MonoBehaviour
     [SerializeField] private string id;
 
 
+    [FormerlySerializedAs("pageTransition")]
     [Header("Transitions (Optional)")]
 
     [Tooltip("Optional enter and exit transitions for this page.\n" +
              "Uses UnityEvents, allowing you to trigger Animators, CanvasGroups, Timelines, etc.")]
-    [SerializeField] private PageTransition pageTransition = new PageTransition();
+    [SerializeField] private UIPageTransition uiPageTransition = new UIPageTransition();
 
 
 // Runtime only
@@ -38,7 +40,7 @@ public class Page : MonoBehaviour
         if (string.IsNullOrEmpty(id))
             id = gameObject.name;
 
-        ManagerUI.Instance.AddElement(id, this);
+        UIManager.Instance.AddElement(id, this);
 
         // Optional: start disabled so ManagerUI controls everything
         // (You can remove this if you want designers to keep some pages active by default.)
@@ -47,8 +49,8 @@ public class Page : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (ManagerUI.Instance != null)
-            ManagerUI.Instance.RemoveElement(id);
+        if (UIManager.Instance != null)
+            UIManager.Instance.RemoveElement(id);
     }
 
     // Enable + enter transition
@@ -60,8 +62,8 @@ public class Page : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        if (pageTransition != null)
-            yield return pageTransition.PlayEnter();
+        if (uiPageTransition != null)
+            yield return uiPageTransition.PlayEnter();
     }
 
     // Exit transition + disable
@@ -73,8 +75,8 @@ public class Page : MonoBehaviour
         if (enterCo != null) { StopCoroutine(enterCo); enterCo = null; }
         if (exitCo != null) { StopCoroutine(exitCo); exitCo = null; }
 
-        if (pageTransition != null)
-            yield return pageTransition.PlayExit();
+        if (uiPageTransition != null)
+            yield return uiPageTransition.PlayExit();
 
         // Disable after exit
         gameObject.SetActive(false);

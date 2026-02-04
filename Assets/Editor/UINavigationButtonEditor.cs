@@ -5,8 +5,8 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(NavBtn))]
-public class NavBtnEditor : Editor
+[CustomEditor(typeof(UINavigationButton))]
+public class UINavigationButtonEditor : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -18,10 +18,10 @@ public class NavBtnEditor : Editor
 
         EditorGUILayout.PropertyField(actionProp);
 
-        var actionEnum = (NavBtn.ActionType)actionProp.enumValueIndex;
+        var actionEnum = (UINavigationButton.ActionType)actionProp.enumValueIndex;
 
         // N'affiche targetId que quand c'est utile
-        if (actionEnum == NavBtn.ActionType.OpenTo || actionEnum == NavBtn.ActionType.OpenOverlay)
+        if (actionEnum == UINavigationButton.ActionType.OpenTo || actionEnum == UINavigationButton.ActionType.OpenOverlay)
         {
             EditorGUILayout.PropertyField(targetIdProp);
             if (string.IsNullOrEmpty(targetIdProp.stringValue))

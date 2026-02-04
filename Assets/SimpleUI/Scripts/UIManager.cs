@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// ManagerUI = central runtime controller that drives which UI Pages are visible.
+// UIManager = central runtime controller that drives which UI Pages are visible.
 // - Pages are referenced by an id (string) -> Page (root of UI page/panel).
 // - There are 2 stacks:
 //   1) MainStack    : history of main pages opened via OpenTo()
 //   2) OverlayStack : overlays / popups opened via OpenOverlay()
 // - Back() rule: close overlays first; if no overlay is open, go back in main history.
-public class ManagerUI : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     // Runtime registry (not shown in Inspector)
     // Main dictionary: pageId -> Page instance.
-    private readonly Dictionary<string, Page> Pages = new Dictionary<string, Page>();
+    private readonly Dictionary<string, UIPage> Pages = new Dictionary<string, UIPage>();
 
     [Header("Startup")]
 
@@ -45,7 +45,7 @@ public class ManagerUI : MonoBehaviour
     public bool IsBusy => isBusy;
 
     #region SINGLETON
-    public static ManagerUI Instance;
+    public static UIManager Instance;
 
     private void Awake()
     {
@@ -74,15 +74,15 @@ public class ManagerUI : MonoBehaviour
     }
 
     // Registers a page (id -> Page).
-    public void AddElement(string id, Page page)
+    public void AddElement(string id, UIPage uiPage)
     {
-        if (string.IsNullOrEmpty(id) || page == null)
+        if (string.IsNullOrEmpty(id) || uiPage == null)
         {
             LogW("ManagerUI: AddElement called with invalid arguments.");
             return;
         }
 
-        if (!Pages.TryAdd(id, page))
+        if (!Pages.TryAdd(id, uiPage))
             LogW($"ManagerUI: id '{id}' already registered (keeping first).");
     }
 

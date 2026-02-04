@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class PageTransition
+public class UIPageTransition
 {
     [Header("Enter Transition")]
 

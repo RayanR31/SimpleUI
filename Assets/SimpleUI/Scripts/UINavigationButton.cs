@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class NavBtn : MonoBehaviour
+public class UINavigationButton : MonoBehaviour
 {
     public enum ActionType
     {
@@ -69,7 +69,7 @@ public class NavBtn : MonoBehaviour
     private void RefreshInteractable()
     {
         if (btn == null) return;
-        var mgr = ManagerUI.Instance;
+        var mgr = UIManager.Instance;
         if (mgr == null) return;
 
         // Expose isBusy via une propriété si tu veux (voir plus bas),
@@ -79,7 +79,7 @@ public class NavBtn : MonoBehaviour
 
     private void OnClick()
     {
-        var mgr = ManagerUI.Instance;
+        var mgr = UIManager.Instance;
         if (mgr == null) return;
 
         switch (action)

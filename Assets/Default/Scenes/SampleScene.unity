@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: setting
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -937,7 +937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: settingPLus
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -1137,7 +1137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: inputManette
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a760081d5d88e4e3bbbf226e7f589f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ManagerUI
-  defaultID: mainMenu
+  defaultID: 
   MainStack: []
   inputBlocker: {fileID: 0}
   isBusy: 0
@@ -3416,7 +3416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: mainMenu
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -4028,7 +4028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: input
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -5023,7 +5023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: credit
-  pageTransition:
+  uiPageTransition:
     onEnter:
       m_PersistentCalls:
         m_Calls: []
