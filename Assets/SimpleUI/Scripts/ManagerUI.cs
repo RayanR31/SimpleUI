@@ -10,23 +10,38 @@ using UnityEngine;
 // - Back() rule: close overlays first; if no overlay is open, go back in main history.
 public class ManagerUI : MonoBehaviour
 {
-    // Main dictionary: id -> Page instance.
+    // Runtime registry (not shown in Inspector)
+    // Main dictionary: pageId -> Page instance.
     private readonly Dictionary<string, Page> Pages = new Dictionary<string, Page>();
 
-    // Serialized mainly for debugging in the inspector.
-    [SerializeField] private List<string> MainStack = new List<string>();
+    [Header("Startup")]
 
-    // Last element = topmost overlay.
-    private readonly List<string> OverlayStack = new List<string>();
-
+    [Tooltip("Page ID opened automatically on Start(). Acts as the root page.")]
     [SerializeField] private string defaultID;
 
-    // Optional: global input blocker (CanvasGroup) to avoid clicks during transitions.
-    // - Assign a full-screen UI object with CanvasGroup (blocks raycasts).
-    [Header("Optional")]
+    [Header("Debug (Runtime)")]
+
+    [Tooltip("Main navigation history (top = last). Serialized for debugging only.")]
+    [SerializeField] private List<string> MainStack = new List<string>();
+
+    // Not serialized by default (not needed in Inspector).
+    [Tooltip("Overlay stack (top = last). Runtime only.")]
+    private readonly List<string> OverlayStack = new List<string>();
+
+    [Header("Input")]
+
+    [Tooltip("Optional full-screen CanvasGroup used to block UI clicks during transitions.\n" +
+             "Assign a UI object stretched to screen with CanvasGroup.blocksRaycasts = true.")]
     [SerializeField] private CanvasGroup inputBlocker;
 
-    private bool isBusy;
+    [Header("State (Runtime)")]
+
+    [Tooltip("True while a navigation transaction is running (transitions playing). Navigation calls are ignored.")]
+    [SerializeField] private bool isBusy;
+
+    /// <summary>
+    /// True while transitions/navigation are running. Useful for UI/inputs to disable interactions.
+    /// </summary>
     public bool IsBusy => isBusy;
 
     #region SINGLETON
@@ -300,5 +315,16 @@ public class ManagerUI : MonoBehaviour
         Debug.LogError(msg, ctx);
 #endif
     }
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (string.IsNullOrWhiteSpace(defaultID))
+        {
+            Debug.LogWarning("ManagerUI: Default ID is empty.", this);
+        }
+    }
+#endif
+
 
 }

@@ -3,6 +3,8 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(NavBtn))]
 public class NavBtnEditor : Editor
 {
@@ -34,3 +36,4 @@ public class NavBtnEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

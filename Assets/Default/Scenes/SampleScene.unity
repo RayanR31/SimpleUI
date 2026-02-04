@@ -171,16 +171,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e09364a8bb284bd2b808193e4ccf6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
-  id: 
+  id: setting
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 2
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &85243428
 GameObject:
   m_ObjectHideFlags: 0
@@ -936,16 +936,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e09364a8bb284bd2b808193e4ccf6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
-  id: 
+  id: settingPLus
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &414377813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,14 +1138,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: inputManette
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &423252571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,9 +1886,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a760081d5d88e4e3bbbf226e7f589f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ManagerUI
-  MainStack: []
   defaultID: mainMenu
+  MainStack: []
   inputBlocker: {fileID: 0}
+  isBusy: 0
 --- !u!4 &715469821
 Transform:
   m_ObjectHideFlags: 0
@@ -3416,14 +3417,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: mainMenu
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &1384131988
 GameObject:
   m_ObjectHideFlags: 0
@@ -4028,14 +4029,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Screen
   id: input
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &1618768021
 GameObject:
   m_ObjectHideFlags: 0
@@ -5021,16 +5022,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e09364a8bb284bd2b808193e4ccf6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Screen
-  id: 
+  id: credit
   pageTransition:
-    Event_Enter:
+    onEnter:
       m_PersistentCalls:
         m_Calls: []
-    durationEnter: 0
-    Event_Exit:
+    enterDuration: 0
+    onExit:
       m_PersistentCalls:
         m_Calls: []
-    durationExit: 0
+    exitDuration: 0
 --- !u!1 &2081440448
 GameObject:
   m_ObjectHideFlags: 0

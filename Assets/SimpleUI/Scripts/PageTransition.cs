@@ -3,28 +3,43 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-[Serializable]
+[System.Serializable]
 public class PageTransition
 {
-    [Header("Enter")]
-    public UnityEvent Event_Enter;
-    [Min(0f)] public float durationEnter = 0f;
+    [Header("Enter Transition")]
 
-    [Header("Exit")]
-    public UnityEvent Event_Exit;
-    [Min(0f)] public float durationExit = 0f;
+    [Tooltip("Invoked when the page becomes visible.\n" +
+             "Use this to trigger animations (Animator, CanvasGroup fade, Timeline, etc.).")]
+    [SerializeField] private UnityEvent onEnter;
+
+    [Tooltip("Duration of the enter transition in seconds.\n" +
+             "ManagerUI waits for this time before allowing new navigation.")]
+    [Min(0f)]
+    [SerializeField] private float enterDuration = 0f;
+
+
+
+    [Header("Exit Transition")]
+
+    [Tooltip("Invoked when the page is about to be hidden.")]
+    [SerializeField] private UnityEvent onExit;
+
+    [Tooltip("Duration of the exit transition in seconds.")]
+    [Min(0f)]
+    [SerializeField] private float exitDuration = 0f;
+
 
     public IEnumerator PlayEnter()
     {
-        Event_Enter?.Invoke();
-        if (durationEnter > 0f)
-            yield return new WaitForSeconds(durationEnter);
+        onEnter?.Invoke();
+        if (enterDuration > 0f)
+            yield return new WaitForSeconds(enterDuration);
     }
 
     public IEnumerator PlayExit()
     {
-        Event_Exit?.Invoke();
-        if (durationExit > 0f)
-            yield return new WaitForSeconds(durationExit);
+        onExit?.Invoke();
+        if (exitDuration > 0f)
+            yield return new WaitForSeconds(exitDuration);
     }
 }

@@ -13,16 +13,24 @@ public class NavBtn : MonoBehaviour
         OpenDefault
     }
 
-    [Header("Action")]
+    [Header("Navigation")]
+
+    [Tooltip("Defines which navigation action will be triggered when the button is clicked.")]
     [SerializeField] private ActionType action = ActionType.OpenTo;
 
-    [Tooltip("Utilisé pour OpenTo / OpenOverlay uniquement")]
+
+    [Tooltip("Target Page ID.\nUsed only for OpenTo and OpenOverlay actions.")]
     [SerializeField] private string targetId;
 
-    [Header("Options")]
-    [Tooltip("Si vrai, le bouton se désactive pendant que ManagerUI est busy (anti-spam local).")]
+
+    [Header("Interaction")]
+
+    [Tooltip("If enabled, the Button becomes non-interactable while ManagerUI is busy.\n" +
+             "Prevents rapid clicking during transitions.")]
     [SerializeField] private bool disableButtonWhileBusy = true;
 
+
+// Cached reference (runtime only)
     private Button btn;
 
     private void Awake()
@@ -102,5 +110,19 @@ public class NavBtn : MonoBehaviour
                 mgr.OpenDefault();
                 break;
         }
+    }
+
+    public string GetTargetIdForValidation()
+    {
+        return targetId;
+    }
+
+    public bool RequiresTargetIdForValidation()
+    {
+        if (action == ActionType.OpenTo || action == ActionType.OpenOverlay)
+        {
+            return true;
+        }
+        return false;
     }
 }

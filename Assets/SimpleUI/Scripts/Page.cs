@@ -1,18 +1,35 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Marks a GameObject as a navigable UI Page.
+/// Pages automatically register themselves to ManagerUI
+/// and can be opened via their unique ID.
+/// </summary>
 // Page = component that marks a GameObject as a UI Page managed by ManagerUI.
 // Responsibilities:
 // - Holds a unique id
 // - Auto register/unregister
 // - Provides Show/Hide methods that play transitions explicitly
+[DisallowMultipleComponent]
 public class Page : MonoBehaviour
 {
+    [Header("Identification")]
+
+    [Tooltip("Unique identifier for this page.\n" +
+             "Used by ManagerUI to open or close the page.\n" +
+             "If left empty, the GameObject name will be used automatically.")]
     [SerializeField] private string id;
 
-    [Header("Optional")]
-    public PageTransition pageTransition = new PageTransition();
 
+    [Header("Transitions (Optional)")]
+
+    [Tooltip("Optional enter and exit transitions for this page.\n" +
+             "Uses UnityEvents, allowing you to trigger Animators, CanvasGroups, Timelines, etc.")]
+    [SerializeField] private PageTransition pageTransition = new PageTransition();
+
+
+// Runtime only
     private Coroutine enterCo;
     private Coroutine exitCo;
 
@@ -70,4 +87,17 @@ public class Page : MonoBehaviour
         if (exitCo != null) { StopCoroutine(exitCo); exitCo = null; }
         gameObject.SetActive(false);
     }
+
+    public string GetIdForValidation()
+    {
+        return id;
+    }
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            id = gameObject.name;
+    }
+#endif
+
 }
