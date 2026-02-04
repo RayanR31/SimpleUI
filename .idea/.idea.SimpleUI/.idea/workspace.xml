@@ -7,18 +7,8 @@
     <list default="true" id="b30a9338-cc33-4061-b0b8-6a33747b9740" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SimpleUI/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SimpleUI/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Default/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Default/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ManagerUIEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/UIManagerEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ManagerUIEditor.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/UIManagerEditor.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/NavBtnEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/UINavigationButtonEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/NavBtnEditor.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/UINavigationButtonEditor.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/ManagerUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/ManagerUI.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIManager.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/NavBtn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UINavigationButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/NavBtn.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UINavigationButton.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/Page.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/Page.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPage.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/PageTransition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPageTransition.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/PageTransition.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPageTransition.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Scripts/UIPage.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +107,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1770219588936</updated>
-      <workItem from="1770219591174" duration="2357000" />
+      <workItem from="1770219591174" duration="2972000" />
     </task>
     <servers />
   </component>

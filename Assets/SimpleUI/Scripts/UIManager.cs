@@ -8,6 +8,7 @@ using UnityEngine;
 //   1) MainStack    : history of main pages opened via OpenTo()
 //   2) OverlayStack : overlays / popups opened via OpenOverlay()
 // - Back() rule: close overlays first; if no overlay is open, go back in main history.
+[DefaultExecutionOrder(-1000)]
 public class UIManager : MonoBehaviour
 {
     // Runtime registry (not shown in Inspector)
@@ -60,17 +61,10 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    private bool isLoad = false;
-    private void Update()
+    private void Start()
     {
-        if (!isLoad)
-        {
-            // If pages register in Awake(), they should be ready here.
-            if (!string.IsNullOrEmpty(defaultID))
-                OpenTo(defaultID);
-            isLoad = true;
-        }
-
+        if (!string.IsNullOrEmpty(defaultID))
+            OpenTo(defaultID);
     }
 
     // Registers a page (id -> Page).

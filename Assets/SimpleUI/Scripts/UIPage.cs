@@ -35,11 +35,17 @@ public class UIPage : MonoBehaviour
     private Coroutine enterCo;
     private Coroutine exitCo;
 
-    private void Start()
+    private void Awake()
     {
         if (string.IsNullOrEmpty(id))
             id = gameObject.name;
-
+        
+        if (UIManager.Instance == null)
+        {
+            Debug.LogError($"UIPage '{name}': ManagerUI instance not found in the scene.", this);
+            return;
+        }
+        
         UIManager.Instance.AddElement(id, this);
 
         // Optional: start disabled so ManagerUI controls everything
