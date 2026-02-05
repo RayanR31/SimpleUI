@@ -4146,7 +4146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavBtn
   action: 0
-  targetId: mainMenu
+  targetId: setting
   disableButtonWhileBusy: 1
 --- !u!114 &1612660758
 MonoBehaviour:

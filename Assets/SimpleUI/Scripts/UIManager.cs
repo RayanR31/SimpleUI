@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
         SetBusy(true);
 
         // 1) Close overlays first
-        yield return CloseAllOverlaysInternal();
+        yield return CloseAllOverlaysInternal(id);
 
         // 2) Exit current main (top of MainStack), if any and different
         string currentMain = MainStack.Count > 0 ? MainStack[^1] : null;
@@ -252,12 +252,12 @@ public class UIManager : MonoBehaviour
         SetBusy(false);
     }
 
-    private IEnumerator CloseAllOverlaysInternal()
+    private IEnumerator CloseAllOverlaysInternal(string targetId = null)
     {
         for (int i = OverlayStack.Count - 1; i >= 0; i--)
         {
             var id = OverlayStack[i];
-            if (Pages.TryGetValue(id, out var page))
+            if (Pages.TryGetValue(id, out var page) && id != targetId)
                 yield return page.Hide();
         }
 
