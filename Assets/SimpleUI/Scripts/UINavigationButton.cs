@@ -10,7 +10,8 @@ public class UINavigationButton : MonoBehaviour
         OpenOverlay,
         Back,
         CloseAll,
-        OpenDefault
+        OpenDefault,
+        None
     }
 
     [Header("Navigation")]
