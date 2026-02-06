@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("True while a navigation transaction is running (transitions playing). Navigation calls are ignored.")]
     [SerializeField] private bool isBusy;
+    [SerializeField] private bool ActiveDefaultPage = true;
 
     /// <summary>
     /// True while transitions/navigation are running. Useful for UI/inputs to disable interactions.
@@ -63,7 +64,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        if (!string.IsNullOrEmpty(defaultID))
+        if (ActiveDefaultPage && !string.IsNullOrEmpty(defaultID))
             OpenTo(defaultID);
     }
 
