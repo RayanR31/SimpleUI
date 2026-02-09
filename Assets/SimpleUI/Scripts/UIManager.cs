@@ -39,6 +39,8 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("True while a navigation transaction is running (transitions playing). Navigation calls are ignored.")]
     [SerializeField] private bool isBusy;
+    [Tooltip("If enabled, ManagerUI automatically opens the Default Page on Start().\n" +
+             "Disable this if you want to control the first page manually (for example after a loading screen).")]
     [SerializeField] private bool ActiveDefaultPage = true;
 
     /// <summary>
@@ -64,6 +66,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        // Opens the default page automatically at startup.
+        // Can be disabled if the first navigation is triggered manually.
         if (ActiveDefaultPage && !string.IsNullOrEmpty(defaultID))
             OpenTo(defaultID);
     }
