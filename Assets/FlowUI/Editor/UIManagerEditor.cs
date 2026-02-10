@@ -2,41 +2,44 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(UIManager))]
-public class UIManagerEditor : Editor
+namespace FlowUI
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(UIManager))]
+    public class UIManagerEditor : Editor
     {
-        DrawDefaultInspector();
-
-        EditorGUILayout.Space(10);
-
-        if (GUILayout.Button("Check Setup"))
+        public override void OnInspectorGUI()
         {
-            Validate();
-        }
-    }
+            DrawDefaultInspector();
 
-    private void Validate()
-    {
-        var pages = Object.FindObjectsOfType<UIPage>(true);
-        var ids = new System.Collections.Generic.HashSet<string>();
+            EditorGUILayout.Space(10);
 
-        foreach (var p in pages)
-        {
-            var id = p.GetIdForValidation(); 
-            if (!ids.Add(id))
-                Debug.LogError($"Duplicate Page ID detected: '{id}'", p);
+            if (GUILayout.Button("Check Setup"))
+            {
+                Validate();
+            }
         }
 
-        var btns = Object.FindObjectsOfType<UINavigationButton>(true);
-        foreach (var b in btns)
+        private void Validate()
         {
-            if (b.RequiresTargetIdForValidation() && string.IsNullOrWhiteSpace(b.GetTargetIdForValidation()))
-                Debug.LogWarning($"NavBtn '{b.name}' is missing a Target ID.", b);
-        }
+            var pages = Object.FindObjectsOfType<UIPage>(true);
+            var ids = new System.Collections.Generic.HashSet<string>();
 
-        Debug.Log("ManagerUI: Validation complete. Check Console for warnings/errors.");
+            foreach (var p in pages)
+            {
+                var id = p.GetIdForValidation();
+                if (!ids.Add(id))
+                    Debug.LogError($"Duplicate Page ID detected: '{id}'", p);
+            }
+
+            var btns = Object.FindObjectsOfType<UINavigationButton>(true);
+            foreach (var b in btns)
+            {
+                if (b.RequiresTargetIdForValidation() && string.IsNullOrWhiteSpace(b.GetTargetIdForValidation()))
+                    Debug.LogWarning($"NavBtn '{b.name}' is missing a Target ID.", b);
+            }
+
+            Debug.Log("ManagerUI: Validation complete. Check Console for warnings/errors.");
+        }
     }
 }
 #endif

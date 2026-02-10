@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b30a9338-cc33-4061-b0b8-6a33747b9740" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SimpleUI/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SimpleUI/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Chewy-Regular SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Chewy-Regular SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Chewy-Regular SDF_outline.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Chewy-Regular SDF_outline.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Oi-Regular SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SimpleUI/Art/Font/Oi-Regular SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FlowUI/Editor/UIManagerEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FlowUI/Editor/UIManagerEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
