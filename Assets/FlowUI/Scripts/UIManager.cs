@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("Page ID opened automatically on Start(). Acts as the root page.")]
     [SerializeField] private string defaultID;
+    [Tooltip("If enabled, ManagerUI automatically opens the Default Page on Start().\n" +
+             "Disable this if you want to control the first page manually (for example after a loading screen).")]
+    [SerializeField] private bool ActiveDefaultPage = true;
 
     [Header("Debug (Runtime)")]
 
@@ -39,9 +42,7 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("True while a navigation transaction is running (transitions playing). Navigation calls are ignored.")]
     [SerializeField] private bool isBusy;
-    [Tooltip("If enabled, ManagerUI automatically opens the Default Page on Start().\n" +
-             "Disable this if you want to control the first page manually (for example after a loading screen).")]
-    [SerializeField] private bool ActiveDefaultPage = true;
+
 
     /// <summary>
     /// True while transitions/navigation are running. Useful for UI/inputs to disable interactions.
