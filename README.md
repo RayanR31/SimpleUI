@@ -92,7 +92,7 @@ Compatible with:
 
 See full documentation here:
 
-[FlowUI Documentation](Documentation/FlowUI_Documentation.md)
+[FlowUI Documentation](Documentation/FlowUI_Documentation.pdf)
 
 ---
 
